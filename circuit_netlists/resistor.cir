@@ -1,0 +1,11 @@
+resistor.cir
+
+VIN 1 0 DC 3
+R1 1 2 1
+R2 2 0 1
+
+.option trtol=1
+
+.tran 10PS 100US uic
+
+.END

@@ -1,0 +1,14 @@
+voltage_control_voltage_source.cir
+
+VIN 1 0 DC 10
+R1 1 2 1
+R2 2 0 4
+
+EIVR1 3 0 1 2 1
+R3 3 0 1
+
+.option trtol=1
+
+.tran 10PS 100US uic
+
+.END
