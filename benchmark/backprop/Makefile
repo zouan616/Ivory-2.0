@@ -1,8 +1,10 @@
 include make.config
 
 # C compiler
-CC = g++
+CC = gcc
 CC_FLAGS = -g  -O2
+
+C++ = g++
 
 # CUDA compiler
 NVCC = $(CUDA_DIR)/bin/nvcc
@@ -34,7 +36,7 @@ backprop.o: backprop.c backprop.h
 	$(CC) $(CC_FLAGS) backprop.c -c
 
 backprop_cuda.o: backprop_cuda.c backprop.h
-	$(CC) $(CC_FLAGS) backprop_cuda.c -c
+	$(C++) $(CC_FLAGS) backprop_cuda.c -c
 
 imagenet.o: imagenet.c backprop.h
 	$(CC) $(CC_FLAGS) imagenet.c -c
