@@ -1,0 +1,12 @@
+Efficiency: 0.847583
+F_sw: 1.8815e+08
+W_sw_hi: 0.00950012
+W_sw_low: 0
+L: 1e-11
+C: 2.5e-09
+N: 10
+Area: 1.145
+P_driver: 0.35749
+P_control: 0.1
+P_sw: 1.33577
+P_ind: 0.005

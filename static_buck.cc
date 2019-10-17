@@ -181,8 +181,12 @@ for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
 								{
 								I_ind = I_load/N;
 								Delta_i = (V_in-V_out)*D/(F_sw*L);
-									Delta_v = (Delta_i/(8*F_sw*C))*(0.25*(1/(D*(1-D))))*(1/(N*N));
-									if(Delta_v <= V_out * Delta_v_range)
+								Delta_i = Delta_i * N * (D-(floor(D*N)/N)) * ((1+floor(D*N))/N - D) / ((1-D)*D);
+									//Delta_v = (Delta_i/(8*F_sw*C))*(0.25*(1/(D*(1-D))))*(1/(N*N));
+									//Delta_v = (Delta_i/(8*F_sw*C))*(0.25*(1/(D*(1-D))))*(1/(N));
+									//Delta_v = (Delta_i/(F_sw*C*N));
+									Delta_v = (Delta_i/(F_sw*C));
+									if(Delta_v <= Delta_v_range)
 									{
 										P_driver = ((C_bridge+C_driver)*(W_sw_hi+W_sw_low))*V_driver*F_sw;
 										P_control = I_control*V_driver;
@@ -291,8 +295,9 @@ for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
 								{
 								I_ind = I_load/N;
 								Delta_i = (V_in-V_out)*D/(F_sw*L);
-									Delta_v = (Delta_i/(8*F_sw*C))*(0.25*(1/(D*(1-D))))*(1/(N*N));
-									if(Delta_v <= V_out * Delta_v_range)
+								  Delta_i = Delta_i * N * (D-(floor(D*N)/N)) * ((1+floor(D*N))/N - D) / ((1-D)*D);
+									Delta_v = (Delta_i/(F_sw*C));
+									if(Delta_v <= Delta_v_range)
 									{
 										P_driver = ((C_bridge+C_driver)*(W_sw_hi+W_sw_low))*V_driver*F_sw;
 										P_control = I_control*V_driver;
@@ -380,8 +385,9 @@ if(Optimization == 1)
 										{
 										I_ind = I_load/N;
 										Delta_i = (V_in-V_out)*D/(F_sw*L);
-											Delta_v = (Delta_i/(8*F_sw*C))*(0.25*(1/(D*(1-D))))*(1/(N*N));
-											if(Delta_v <= V_out * Delta_v_range)
+										  Delta_i = Delta_i * N * (D-(floor(D*N)/N)) * ((1+floor(D*N))/N - D) / ((1-D)*D);
+											Delta_v = (Delta_i/(F_sw*C));
+											if(Delta_v <= Delta_v_range)
 											{
 												P_driver = ((C_bridge+C_driver)*(W_sw_hi+W_sw_low))*V_driver*F_sw;
 												P_control = I_control*V_driver;
