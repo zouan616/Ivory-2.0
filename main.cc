@@ -26,7 +26,7 @@ int main()
 {
   //----------------Static Optimization-----------------
   // Static_Buck(double Vin, double Vout, double P, double Area_buget, double ripple, double Efficiency_buget, int Optimization_Target 0 for efficiency 1 for area)
-  Static_Buck(5, 1, 10, 100, 0.01, 0.8, 0);
+  Static_Buck(3.3, 1, 20, 200, 0.01, 0.8, 0);
 
   // Static_Switched_Capacitor(double Vin, double Vout, double P, double Area_buget, double ripple, double Efficiency_buget, int Optimization_Target 0 for efficiency 1 for area)
   //Static_Switched_Capacitor(3.3, 1, 20, 200, 0.01, 0.7, 0);

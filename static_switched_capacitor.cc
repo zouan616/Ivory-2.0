@@ -58,7 +58,7 @@ cout << "Area_driver: " << Area_driver << endl;
 double Leak_sw = 0.5;
 Leak_sw = Read_in_Technology(7);
 cout << "Leak_sw: " << Leak_sw << endl;
-double Switching_loss = 0.1*0.000000001;
+double Switching_loss = 0.001;
 Switching_loss = Read_in_Technology(8);
 cout << "Switching_loss: " << Switching_loss << endl;
 double Area_driver_controller = 0.05*0.000001; //0.05 mm2

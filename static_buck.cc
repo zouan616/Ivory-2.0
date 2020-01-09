@@ -86,7 +86,7 @@ cout << "Area_driver: " << Area_driver << endl;
 double Leak_sw = 0.5;
 Leak_sw = Read_in_Technology(7);
 cout << "Leak_sw: " << Leak_sw << endl;
-double Switching_loss = 0.1*0.000000001;
+double Switching_loss = 0.001;
 Switching_loss = Read_in_Technology(8);
 cout << "Switching_loss: " << Switching_loss << endl;
 double Area_driver_controller = 0.05*0.000001; //0.05 mm2
@@ -176,6 +176,9 @@ for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
 
 						for(L = 0; L <= L_max/N; L = L + L_step/N)
 						{
+              //dynamic model constraints
+						if(log10(L) <= (18.18/log10(C)-6.576) // 1us DVFS
+						{
 							Actual_area = N * (Area_driver_controller + (W_sw_hi + W_sw_low)*Area_driver + L/L_density + C/C_density);
 							if(Actual_area <= Area)
 								{
@@ -190,7 +193,7 @@ for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
 									{
 										P_driver = ((C_bridge+C_driver)*(W_sw_hi+W_sw_low))*V_driver*F_sw;
 										P_control = I_control*V_driver;
-										P_sw = (D*R_sw/W_sw_hi + (1-D)*R_sw/W_sw_hi)*(I_ind*I_ind + (1/12)*Delta_i*Delta_i) + Leak_sw*(W_sw_hi+W_sw_low) + Switching_loss*I_ind*F_sw;
+										P_sw = (D*R_sw/W_sw_hi + (1-D)*R_sw/W_sw_hi)*(I_ind*I_ind + (1/12)*Delta_i*Delta_i) + Leak_sw*(W_sw_hi+W_sw_low) + Switching_loss*(W_sw_hi+W_sw_low)*I_ind*F_sw;
 										P_ind = R_ind * L * (I_ind*I_ind + (1/12)*Delta_i*Delta_i);
 										Converter_power = (P_driver + P_control + P_sw + P_ind)*N;
 										Efficiency_tep = P_load/(P_load + Converter_power);
@@ -226,7 +229,7 @@ for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
 									}
 									}
 
-
+                }
 							}
 						}
         	}
@@ -293,15 +296,20 @@ for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
 							Actual_area = N * (Area_driver_controller + (W_sw_hi + W_sw_low)*Area_driver + L/L_density + C/C_density);
 							if(Actual_area <= Area)
 								{
-								I_ind = I_load/N;
-								Delta_i = (V_in-V_out)*D/(F_sw*L);
-								  Delta_i = Delta_i * N * (D-(floor(D*N)/N)) * ((1+floor(D*N))/N - D) / ((1-D)*D);
-									Delta_v = (Delta_i/(F_sw*C));
+
+									I_ind = I_load/N;
+									Delta_i = (V_in-V_out)*D/(F_sw*L);
+									Delta_i = Delta_i * N * (D-(floor(D*N)/N)) * ((1+floor(D*N))/N - D) / ((1-D)*D);
+										//Delta_v = (Delta_i/(8*F_sw*C))*(0.25*(1/(D*(1-D))))*(1/(N*N));
+										//Delta_v = (Delta_i/(8*F_sw*C))*(0.25*(1/(D*(1-D))))*(1/(N));
+										//Delta_v = (Delta_i/(F_sw*C*N));
+										Delta_v = (Delta_i/(F_sw*C));
+
 									if(Delta_v <= Delta_v_range)
 									{
 										P_driver = ((C_bridge+C_driver)*(W_sw_hi+W_sw_low))*V_driver*F_sw;
 										P_control = I_control*V_driver;
-										P_sw = (D*R_sw/W_sw_hi + (1-D)*R_sw/W_sw_hi)*(I_ind*I_ind + (1/12)*Delta_i*Delta_i) + Leak_sw*(W_sw_hi+W_sw_low) + Switching_loss*I_ind*F_sw;
+										P_sw = (D*R_sw/W_sw_hi + (1-D)*R_sw/W_sw_hi)*(I_ind*I_ind + (1/12)*Delta_i*Delta_i) + Leak_sw*(W_sw_hi+W_sw_low) + Switching_loss*(W_sw_hi+W_sw_low)*I_ind*F_sw;
 										P_ind = R_ind * L * (I_ind*I_ind + (1/12)*Delta_i*Delta_i);
 										Converter_power = (P_driver + P_control + P_sw + P_ind)*N;
 										Efficiency_tep = P_load/(P_load + Converter_power);
@@ -313,19 +321,21 @@ for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
 											W_sw_low_tep = W_sw_low;
 											L_tep = L;
 											C_tep = C;
-											L_total = L_total*N;
-											C_total = C_total*N;
+											L_total = L*N;
+											C_total = C*N;
 											N_tep = N;
 
 											cout << "" << endl;
 											cout << "Efficiency: "<< Efficiency << endl;
+											cout << "Area: " << Actual_area*1000000 << endl;
+											cout << "Ripple: " << Delta_v << endl;
 											cout << "F_sw: "<< F_sw_tep << endl;
 											cout << "W_sw_hi: "<< W_sw_hi_tep << endl;
 											cout << "W_sw_low: "<< W_sw_low_tep << endl;
-											cout << "L: "<< L_tep << endl;
-											cout << "C: "<< C_tep << endl;
+											cout << "L_total: "<< L_total << endl;
+											cout << "C_total: "<< C_total << endl;
 											cout << "N: "<< N_tep << endl;
-											cout << "Area: " << Actual_area*1000000 << endl;
+
 
 											cout << "P_driver: " << P_driver*N << endl;
 											cout << "P_control: " << P_control*N << endl;
