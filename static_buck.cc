@@ -149,11 +149,11 @@ double Delta_v;
 if(Optimization == 0)
 {
 //Optimization Step------After 2 levels Optimization, the step will become 0.01*step
-double F_sw_step = 100000;
+double F_sw_step = 1000000;
 double W_sw_step = 0.0001;
 double L_step = (Area/100)*L_density; // The efficiency is very sensitive to L, so the L_step should be smaller
 double C_step = (Area/10)*C_density;
-double N_step = 4;
+double N_step = 15;
 
 //First Level Optimization
 for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
@@ -177,7 +177,10 @@ for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
 						for(L = 0; L <= L_max/N; L = L + L_step/N)
 						{
               //dynamic model constraints
-						if(log10(L) <= (18.18/log10(C)-6.576) // 1us DVFS
+						//if(log10(L) <= (-0.35*log10(C)-12.0)) // 0.5us DVFS
+						//if(log10(L) <= (-0.35*log10(C)-12.0)) // 0.5us DVFS
+						//if(log10(L) <= (-0.3*log10(C)-11.1)) // 2us DVFS
+						//if(log10(L) <= (-0.33*log10(C)-11)) // 2us DVFS
 						{
 							Actual_area = N * (Area_driver_controller + (W_sw_hi + W_sw_low)*Area_driver + L/L_density + C/C_density);
 							if(Actual_area <= Area)
@@ -238,6 +241,7 @@ for(F_sw = F_min; F_sw <= F_max; F_sw = F_sw + F_sw_step)
     }
 }
 
+exit(0);
 
 
 //--------------------Level 2 Optimization-------------------------------------
